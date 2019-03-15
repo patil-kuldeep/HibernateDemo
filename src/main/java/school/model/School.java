@@ -17,16 +17,13 @@ public class School {
     @Column(name = "phoneNo")
     private String phoneNo;
     // one (school) to many
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name = "school_id")
+    @OneToMany(mappedBy = "school", cascade=CascadeType.ALL)
     private List<Student> students;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name = "school_id")
+    @OneToMany(mappedBy = "school", cascade=CascadeType.ALL)
     private List<Teacher> teachers;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "school_id")
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private List<Clerk> clerks;
     // one to one
     @OneToOne

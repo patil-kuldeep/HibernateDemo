@@ -14,12 +14,14 @@ import java.util.Objects;
 public class Student extends Person {
 
     @ManyToOne
+    @JoinColumn(name = "school_id")
     private School school;
 
     @Column(name = "rollNo")
     private int rollNo;
 
     @ManyToOne
+    @JoinColumn(name="grade_id")
     private Grade grade;
 
     public School getSchool() {

@@ -96,10 +96,6 @@ public class Application {
             Student student1 = createStudent(21, "Rafi", 'M', 8);
             Student student2 = createStudent(19, "Kishor", 'M', 9);
             Student student3 = createStudent(17, "Mohit", 'M', 8);
-//
-//            session.save(student1);
-//            session.save(student2);
-//            session.save(student3);
 
             Grade grade1 = new Grade();
             grade1.setName("Third Grade");

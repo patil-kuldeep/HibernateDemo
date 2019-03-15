@@ -3,11 +3,12 @@ package school.model;
 import javax.persistence.*;
 
 
-@Entity
 @Table
+@MappedSuperclass
 @PrimaryKeyJoinColumn(name = "id")
 public class Staff extends Person {
     @ManyToOne
+    @JoinColumn(name = "school_id")
     private School school;
 
     public School getSchool() {

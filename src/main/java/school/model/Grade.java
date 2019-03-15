@@ -14,10 +14,10 @@ public class Grade {
     private int id;
 
     @ManyToOne
+    @JoinColumn(name = "teacher_staff_id")
     private Teacher teacher;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="grade_id")
+    @OneToMany(mappedBy = "grade", cascade = CascadeType.ALL)
     private List<Student> students;
 
     private String name;
