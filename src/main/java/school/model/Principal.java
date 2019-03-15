@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.util.Objects;
 
 
 @Entity
@@ -19,5 +20,19 @@ public class Principal extends Staff {
 
     public void setYearsOfExperience(int yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Principal principal = (Principal) o;
+        return yearsOfExperience == principal.yearsOfExperience;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), yearsOfExperience);
     }
 }

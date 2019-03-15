@@ -19,9 +19,80 @@ public class Application {
             addEntities(session);
             updateEntities(session);
             deleteEntries(session);
+            bulkInsertForStudents(session, 5);
+            bulkInsertForTeachers(session, 10);
+            bulkUpdateForStudents(session);
         } finally {
             session.close();
             SessionUtils.shutDown();
+        }
+    }
+
+    private static void bulkUpdateForStudents(Session session) {
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Query query = session.createQuery("from Student");
+            List<Student> students = query.list();
+            students.stream().forEach(student -> System.out.println(student.getFirstName() + " : " + student.getAge()));
+            for(int i= 0; i<students.size(); i++) {
+                students.get(i).setAge(students.get(i).getAge() + (i+5));
+                session.update(students.get(i));
+                if(i % 5 == 0) {
+                    session.flush();
+                    session.clear();
+                }
+            }
+
+            students.stream().forEach(student -> System.out.println(student.getFirstName() + " : " + student.getAge()));
+            tx.commit();
+        } catch (HibernateException he) {
+            if(tx != null) tx.rollback();
+            he.printStackTrace();
+        }
+    }
+
+    private static void bulkInsertForTeachers(Session session, int numberOfRecords) {
+        Transaction txn = null;
+        try {
+            txn = session.beginTransaction();
+            for(int i = 1; i <= numberOfRecords; i++) {
+                Teacher teacher = new Teacher();
+                teacher.setFirstName("Teacher"+i);
+                teacher.setGender('F');
+                teacher.setAge(27+i);
+
+                session.save(teacher);
+                //batch size is configured to be 50 in the hibernate.cfg.xml
+                if(i % 5 == 0) {
+                    session.flush();
+                    session.clear();
+                }
+            }
+            txn.commit();
+        } catch (HibernateException he) {
+            if(txn != null) txn.rollback();
+            throw he;
+        }
+    }
+
+    private static void bulkInsertForStudents(Session session, int numberOfRecords) {
+        Transaction txn = null;
+        try {
+            txn = session.beginTransaction();
+            for(int i = 1; i <= numberOfRecords; i++) {
+                Student student = createStudent(i+20, "TestUser"+i, 'M', 8);
+                session.save(student);
+                //batch size is configured to be 50 in the hibernate.cfg.xml
+                if(i % 50 == 0) {
+                    session.flush();
+                    session.clear();
+                }
+            }
+            txn.commit();
+        } catch (HibernateException he) {
+            if(txn != null) txn.rollback();
+            throw he;
         }
     }
 
@@ -89,13 +160,16 @@ public class Application {
 
     public static void addEntities(Session session) {
         Transaction tx = null;
-
         try {
             tx = session.beginTransaction();
 
             Student student1 = createStudent(21, "Rafi", 'M', 8);
             Student student2 = createStudent(19, "Kishor", 'M', 9);
             Student student3 = createStudent(17, "Mohit", 'M', 8);
+
+            School school = new School();
+            school.setName("Army Public School");
+            school.setPhoneNo("020-471-8989");
 
             Grade grade1 = new Grade();
             grade1.setName("Third Grade");
@@ -117,17 +191,18 @@ public class Application {
             cl1.setGender('M');
             cl1.setAge(39);
             cl1.setDepartment("Accounts");
+            cl1.setSchool(school);
 
             Clerk cl2 = new Clerk();
             cl2.setFirstName("Kamal");
             cl2.setGender('M');
             cl2.setAge(47);
             cl2.setDepartment("Cultural");
+            cl2.setSchool(school);
 
             List<Clerk> clerks = new ArrayList<>();
             clerks.add(cl1);
             clerks.add(cl2);
-
 
             Teacher teacher1 = new Teacher();
             teacher1.setFirstName("Vritika");
@@ -135,6 +210,7 @@ public class Application {
             teacher1.setGender('F');
             teacher1.setLastName("Gosh");
             teacher1.setGrades(Arrays.asList(grade1));
+            teacher1.setSchool(school);
 
             Teacher teacher2 = new Teacher();
             teacher2.setFirstName("Rishabh");
@@ -142,7 +218,7 @@ public class Application {
             teacher2.setGender('M');
             teacher2.setLastName("Mehta");
             teacher2.setGrades(Arrays.asList(grade2));
-
+            teacher2.setSchool(school);
 
             List<Teacher> teachers = new ArrayList<>();
             teachers.add(teacher1);
@@ -162,22 +238,27 @@ public class Application {
 
             session.save(principal);
 
-            School school = new School();
-            school.setName("Army Public School");
-            school.setPhoneNo("020-471-8989");
+            Board board = new Board();
+            board.setName("CBSE");
+
             school.setStudents(Arrays.asList(student1, student2, student3));
             school.setTeachers(teachers);
             school.setPrincipal(principal);
             school.setClerks(clerks);
+            school.setBoard(board);
+
+            board.setSchools(Arrays.asList(school));
 
             student1.setSchool(school);
             student2.setSchool(school);
             student3.setSchool(school);
 
             session.save(school);
+            session.save(board);
             session.save(student1);
             session.save(student2);
             session.save(student3);
+
             tx.commit();
             System.out.println("Finished Execution!");
 

@@ -10,11 +10,13 @@
         <property name="connection.username">postgres</property>
         <property name="connection.password">secret123</property>
 
-        <property name="cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
+       <!-- <property name="cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+       -->
         <property name="current_session_context_class">thread</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.jdbc.batch_size">5</property>
 
         <mapping class="school.model.Person"/>
         <mapping class="school.model.Student"/>
@@ -24,5 +26,8 @@
         <mapping class="school.model.Staff"/>
         <mapping class="school.model.Principal"/>
         <mapping class="school.model.Clerk"/>
+        <mapping class="school.model.Board"/>
+        <mapping class="school.model.PTA"/>
+        <mapping class="school.model.Parent"/>
     </session-factory>
 </hibernate-configuration>

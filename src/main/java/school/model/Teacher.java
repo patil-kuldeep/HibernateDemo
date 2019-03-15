@@ -8,7 +8,7 @@ import java.util.List;
 @Table
 @PrimaryKeyJoinColumn(name = "staff_id")
 public class Teacher extends Staff {
-    @OneToMany (mappedBy ="teacher", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy ="teacher")
     private List<Grade> grades;
 
     public List<Grade> getGrades() {
