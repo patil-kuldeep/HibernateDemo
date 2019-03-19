@@ -1,5 +1,7 @@
 package school.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,10 +13,16 @@ public class Board {
     private int id;
     // one to many
     @OneToMany(mappedBy = "board")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<School> schools;
 
     @Column(name = "board_name")
     private String name;
+
+    public Board() {}
+    public Board(String name) {
+        this.name = name;
+    }
 
     public List<School> getSchools() {
         return schools;
