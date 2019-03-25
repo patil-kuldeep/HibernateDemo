@@ -1,5 +1,7 @@
 package school.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -17,24 +19,36 @@ public class School {
 
     @Column(name = "phoneNo")
     private String phoneNo;
+
+    public School() {}
+    public School(String name, String phoneNo) {
+        this.name = name;
+        this.phoneNo = phoneNo;
+    }
+
     // one (school) to many
     @OneToMany(mappedBy = "school")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Student> students;
 
     @OneToMany(mappedBy = "school")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Teacher> teachers;
 
     @OneToMany(mappedBy = "school")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Clerk> clerks;
     // one to one
     @OneToOne
     @JoinColumn(name = "principal_id")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private Principal principal;
 //    // many to many
     @ManyToMany
     @JoinTable(name = "school_ptas",
             joinColumns={@JoinColumn(referencedColumnName="id")}
             , inverseJoinColumns={@JoinColumn(referencedColumnName="id")})
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<PTA> ptas;
     @ManyToOne
     @JoinColumn(name = "board_id")

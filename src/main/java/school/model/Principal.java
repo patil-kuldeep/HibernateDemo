@@ -14,6 +14,12 @@ public class Principal extends Staff {
     @Column(name = "y_of_exp")
     private int yearsOfExperience;
 
+    public Principal() {}
+    public Principal(String fName, String lName, char gender, int age, int yearsOfExperience) {
+        super(fName, lName, gender, age);
+        this.yearsOfExperience = yearsOfExperience;
+    }
+
     public int getYearsOfExperience() {
         return yearsOfExperience;
     }

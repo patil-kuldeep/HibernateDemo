@@ -1,12 +1,13 @@
 package school.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table (name = "Grade")
 public class Grade {
-
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -16,10 +17,16 @@ public class Grade {
     @JoinColumn(name = "teacher_staff_id")
     private Teacher teacher;
 
-    @OneToMany(mappedBy = "grade", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "grade")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Student> students;
 
     private String name;
+
+    public Grade(){}
+    public Grade(String name) {
+        this.name = name;
+    }
 
     public List<Student> getStudents() {
         return students;
@@ -43,5 +50,13 @@ public class Grade {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 }

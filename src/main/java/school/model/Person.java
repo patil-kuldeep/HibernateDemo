@@ -1,25 +1,33 @@
 package school.model;
 
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "person")
+@OptimisticLocking(type = OptimisticLockType.DIRTY)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Person {
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int id;
+
+    @Version
+    int version;
+
     @Column(name = "first_name", nullable = false, updatable = false)
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "gender", nullable = false)
     private char gender;
     @Column(name = "age")
     private int age;
-
     public Person() { }
 
     public Person(String fName, String lName, char gender, int age) {
@@ -63,6 +71,14 @@ public class Person {
 
     public void setGender(char gender) {
         this.gender = gender;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override

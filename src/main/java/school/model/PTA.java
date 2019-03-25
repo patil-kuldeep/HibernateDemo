@@ -1,5 +1,7 @@
 package school.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class PTA {
     private String name;
 
     @OneToMany (mappedBy = "pta")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Parent> members;
 
     @ManyToMany(mappedBy = "ptas")
@@ -32,5 +35,21 @@ public class PTA {
 
     public void setSchools(List<School> schools) {
         this.schools = schools;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

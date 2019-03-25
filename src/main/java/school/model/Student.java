@@ -13,6 +13,20 @@ import java.util.Objects;
 @PrimaryKeyJoinColumn(name = "id")
 public class Student extends Person {
 
+    public Student() {}
+
+    public Student(School school, Grade grade, int rollNo, String fName, String lName, char gender, int age) {
+        super(fName, lName, gender, age);
+        this.school = school;
+        this.rollNo = rollNo;
+        this.grade = grade;
+    }
+
+    public Student(int rollNo, String fName, String lName, char gender, int age) {
+        super(fName, lName, gender, age);
+        this.rollNo = rollNo;
+    }
+
     @ManyToOne
     @JoinColumn(name = "school_id")
     private School school;
@@ -46,6 +60,14 @@ public class Student extends Person {
 
     public void setRollNo(int rollNo) {
         this.rollNo = rollNo;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override
