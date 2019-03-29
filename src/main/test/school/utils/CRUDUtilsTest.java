@@ -1,15 +1,11 @@
 package school.utils;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.junit.Test;
 import school.connection.SessionUtils;
 import school.model.Student;
 
 import java.util.List;
-
 
 public class CRUDUtilsTest {
     @Test

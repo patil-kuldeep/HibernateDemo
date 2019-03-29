@@ -1,6 +1,7 @@
 package school.model;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,7 +28,7 @@ public class School {
     }
 
     // one (school) to many
-    @OneToMany(mappedBy = "school")
+    @OneToMany(mappedBy = "school", fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Student> students;
 

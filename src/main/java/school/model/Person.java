@@ -24,7 +24,7 @@ public class Person {
 
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender")
     private char gender;
     @Column(name = "age")
     private int age;
