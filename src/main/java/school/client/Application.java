@@ -15,13 +15,31 @@ public class Application {
     public static void main(String[] args) {
      try {
          cascadeInsert();
+         dirtyCheckingUpdate();
          cascadeUpdate();
          cascadeDelete();
          bulkInsertForStudents(10);
          bulkUpdateForStudents();
+
      } finally {
          SessionUtils.shutDown();
      }
+    }
+
+    private static void dirtyCheckingUpdate() {
+        Session session = SessionUtils.getSession();
+        Transaction txn = null;
+        try {
+            txn = session.beginTransaction();
+            Query query2 = session.createQuery("from Teacher");
+            List<Teacher> teachers = query2.list();
+            teachers.stream().forEach(teacher -> teacher.setAge(teacher.getAge() + 7));
+            txn.commit();
+
+        } catch (HibernateException he) {
+            if(txn != null) txn.rollback();
+            session.close();
+        }
     }
 
     public static void bulkUpdateForStudents() {
