@@ -12,7 +12,7 @@ import java.util.List;
 public class BoardDaoImpl extends BaseDao<Board> implements BoardDao {
     @Override
     public List<School> getSchools(int boardId) {
-        Query query = currentSession().createQuery("from Board where id: id");
+        Query query = getCurrentSession().createQuery("from Board where id: id");
         query.setParameter("id", boardId);
         Board board = (Board)query.list().get(0);
         return board.getSchools();

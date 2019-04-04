@@ -11,6 +11,7 @@ import school.service.SchoolService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SchoolServiceImpl implements SchoolService {
@@ -65,6 +66,25 @@ public class SchoolServiceImpl implements SchoolService {
     public void insertAllStudents(List<Student> students) {
         studentDao.saveAll(students);
         System.out.println("All the students successfully registered!");
+    }
+
+    @Override
+    @Transactional
+    public Student getStudentByRollNumber(int rollNo) throws Exception {
+        Student student = studentDao.getStudentByRollNumber(rollNo);
+        if(student != null) {
+            System.out.println("Student with given roll number found.");
+        } else {
+            System.out.println("Student not found");
+            throw new Exception("Student not found");
+        }
+        return student;
+    }
+
+    @Override
+    @Transactional
+    public List<Student> getAllStudents() {
+        return studentDao.getAll();
     }
 
     @Override
@@ -183,6 +203,7 @@ public class SchoolServiceImpl implements SchoolService {
             System.out.println("Principal to remove does not exists!");
         }
         principalDao.delete(p1);
+
         System.out.println("Principal deleted successfully!");
     }
 
@@ -355,6 +376,22 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     @Transactional
+    public void updateSchoolWithPTAs(int school_id, List<Integer> ptaIds) {
+        School school = schoolDao.get(school_id);
+        List<PTA> ptas = new ArrayList<>();
+        for(int ptaId : ptaIds) {
+            PTA pta = ptaDao.get(ptaId);
+            ptas.add(pta);
+            pta.setSchools(Arrays.asList(school));
+            ptaDao.update(pta);
+        }
+        school.setPtas(ptas);
+        schoolDao.update(school);
+        System.out.println("PTA updated with schools successfully!");
+    }
+
+    @Override
+    @Transactional
     public void updatePTAWithParents(int ptaId, List<Integer> parentIds) {
         PTA pta = ptaDao.get(ptaId);
         List<Parent> parents = new ArrayList<>();
@@ -366,6 +403,25 @@ public class SchoolServiceImpl implements SchoolService {
         pta.setMembers(parents);
         ptaDao.update(pta);
         System.out.println("PTA updated with parents!");
+    }
+
+    @Override
+    @Transactional
+    public void deleteSchool(int schoolId) {
+        School school = schoolDao.get(schoolId);
+        schoolDao.delete(school);
+    }
+
+    @Override
+    @Transactional
+    public List<Student> findAllStudentsByAttribute(Map<String, Object> criteria) throws Exception {
+        List<Student> students = studentDao.findAllByAttribute(criteria);
+        if(students.size() > 0) {
+            System.out.println("Students found with the criteria");
+        } else {
+            throw new Exception("No student found with this criteria");
+        }
+        return students;
     }
 
     @Override

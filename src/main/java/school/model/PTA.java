@@ -15,10 +15,10 @@ public class PTA {
     private String name;
 
     @OneToMany (mappedBy = "pta")
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    //@Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Parent> members;
 
-    @ManyToMany(mappedBy = "ptas")
+    @ManyToMany(mappedBy = "ptas", fetch = FetchType.EAGER)
     private List<School> schools;
 
     public List<Parent> getMembers() {

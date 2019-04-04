@@ -45,7 +45,7 @@ public class School {
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private Principal principal;
 //    // many to many
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "school_ptas",
             joinColumns={@JoinColumn(referencedColumnName="id")}
             , inverseJoinColumns={@JoinColumn(referencedColumnName="id")})

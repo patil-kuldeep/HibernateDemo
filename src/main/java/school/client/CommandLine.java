@@ -2,10 +2,7 @@ package school.client;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import school.model.Principal;
-import school.model.School;
-import school.model.Student;
-import school.model.Teacher;
+import school.model.*;
 import school.service.SchoolService;
 
 import java.util.Arrays;
@@ -22,8 +19,11 @@ public class CommandLine {
     static final String ADD_STUDENT_TO_SCHOOL = "add_s_to_school";
     static final String ADD_PRINCIPAL = "add_principal";
     static final String ADD_PRINCIPAL_TO_SCHOOL = "add_p_to_school";
+    static final String ADD_BOARD = "add_board";
+    static final String UPDATE_SCHOOL_PRINCIPAL = "update_principal";
+    static final String REMOVE_PRINCIPAL = "remove_principal";
 
-    static final List<String> commands = Arrays.asList(ADD_PRINCIPAL_TO_SCHOOL, SHOW_STUDENT, ADD_STUDENT, REMOVE_STUDENT, ADD_TEACHER, ADD_TEACHER_TO_SCHOOL, ADD_STUDENT_TO_SCHOOL, REMOVE_SCHOOL, ADD_PRINCIPAL, ADD_SCHOOL);
+    static final List<String> commands = Arrays.asList(REMOVE_PRINCIPAL, UPDATE_SCHOOL_PRINCIPAL, ADD_BOARD, ADD_PRINCIPAL_TO_SCHOOL, SHOW_STUDENT, ADD_STUDENT, REMOVE_STUDENT, ADD_TEACHER, ADD_TEACHER_TO_SCHOOL, ADD_STUDENT_TO_SCHOOL, REMOVE_SCHOOL, ADD_PRINCIPAL, ADD_SCHOOL);
 
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
@@ -61,7 +61,46 @@ public class CommandLine {
             case ADD_PRINCIPAL_TO_SCHOOL:
                 addPrincipalToSchool(args, schoolService);
                 break;
+            case UPDATE_SCHOOL_PRINCIPAL:
+                updatePrincipal(args, schoolService);
+                break;
+            case ADD_BOARD:
+                addBoard(args, schoolService);
+                break;
+            case REMOVE_PRINCIPAL:
+                removePrincipal(args, schoolService);
+                break;
         }
+    }
+
+    private static void removePrincipal(String[] args, SchoolService schoolService) {
+        if(args.length != 2) {
+            printHelpMessage();
+            return;
+        }
+        schoolService.removePrincipal(Integer.parseInt(args[1]));
+    }
+
+    private static void updatePrincipal(String[] args, SchoolService schoolService) {
+        if(args.length != 3) {
+            printHelpMessage();
+            return;
+        }
+        try {
+            schoolService.updatePrincipalOfSchool(Integer.parseInt(args[2]), Integer.parseInt(args[1]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void addBoard(String[] args, SchoolService schoolService) {
+        if(args.length != 2) {
+            printHelpMessage();
+            return;
+        }
+        Board board = new Board();
+        board.setName(args[1]);
+        schoolService.insertBoard(board);
     }
 
     private static void addPrincipalToSchool(String[] args, SchoolService schoolService) {
@@ -191,5 +230,8 @@ public class CommandLine {
         System.out.println("\t\t add_student_to_school <s_id> <school_id>  : Add a Student to School");
         System.out.println("\t\t add_principal <fName> <lName> <y_of_exp> <age> <gender>  : Add Principal");
         System.out.println("\t\t add_principal_to_school <p_id> <school_id> : Add Principal to School");
+        System.out.println("\t\t add_board <board_name>                     : Add Board");
+        System.out.println("\t\t update_principal <p_id> <s_id>             : Update School Principal");
+        System.out.println("\t\t remove_principal <p_id>                    : Remove Principal");
     }
 }

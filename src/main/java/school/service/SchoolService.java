@@ -3,6 +3,7 @@ package school.service;
 import school.model.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SchoolService {
 
@@ -11,6 +12,10 @@ public interface SchoolService {
     void deleteStudent(String firstName);
 
     void insertAllStudents(List<Student> students);
+
+    Student getStudentByRollNumber(int rollNo) throws Exception;
+
+    List<Student> getAllStudents();
 
     List<Grade> listGradesForTeacherById(int id);
 
@@ -60,5 +65,11 @@ public interface SchoolService {
 
     void updatePTAWithSchools(int ptaId, List<Integer> schoolIds);
 
+    void updateSchoolWithPTAs(int school_id, List<Integer> ptaIds);
+
     void updatePTAWithParents(int ptaId, List<Integer> parentIds);
+
+    void deleteSchool(int schoolId);
+
+    List<Student> findAllStudentsByAttribute(Map<String, Object> criteria) throws Exception;
 }

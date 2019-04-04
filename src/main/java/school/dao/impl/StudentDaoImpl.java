@@ -11,7 +11,7 @@ import java.util.List;
 public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     @Override
     public Student getStudentByRollNumber(int rollNo) {
-        Query query = currentSession().createQuery("from Student where rollNo = :rollN");
+        Query query = getCurrentSession().createQuery("from Student where rollNo = :rollN");
         query.setParameter("rollN", rollNo);
         List<Student> students = query.list();
         if(students.size() != 0) {
@@ -22,7 +22,7 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
 
     @Override
     public List<Student> getStudentByGender(char gender) {
-        Query query = currentSession().createQuery("from Student where gender = :gender");
+        Query query = getCurrentSession().createQuery("from Student where gender = :gender");
         query.setParameter("gender", gender);
         List<Student> students = query.list();
         return students;
@@ -30,7 +30,7 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
 
     @Override
     public Student getStudentByFirstName(String firstName) {
-        Query query = currentSession().createQuery("from Student where firstName = :firstName");
+        Query query = getCurrentSession().createQuery("from Student where firstName = :firstName");
         query.setParameter("firstName", firstName);
         return (Student) query.list().get(0);
     }
