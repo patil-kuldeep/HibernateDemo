@@ -1,17 +1,18 @@
 package school.dao.impl;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import school.dao.IBaseDao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BaseDao<T> implements IBaseDao<T> {
 
@@ -27,14 +28,14 @@ public class BaseDao<T> implements IBaseDao<T> {
     }
 
     @Override
-    public void save(T object) {
-        sessionFactory.getCurrentSession().save(object);
+    public Serializable save(T object) {
+        return sessionFactory.getCurrentSession().save(object);
     }
 
     @Override
     public void saveAll(List<T> objects) {
         for(T object: objects) {
-            sessionFactory.getCurrentSession().save(object);
+            sessionFactory.getCurrentSession().persist(object);
         }
     }
 
@@ -47,7 +48,7 @@ public class BaseDao<T> implements IBaseDao<T> {
     @Override
     public List<T> getAll() {
         List<T> objects = new ArrayList<>();
-        Query q = sessionFactory.getCurrentSession().createQuery("from " + entityClass);
+        Query q = sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName());
         objects = q.list();
         return objects;
     }
@@ -69,8 +70,21 @@ public class BaseDao<T> implements IBaseDao<T> {
         sessionFactory.getCurrentSession().update(object);
     }
 
-    protected Session currentSession() {
+    @Override
+    public List<T> findAllByAttribute(Map<String, Object> attributeList) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(entityClass);
+
+        for(Map.Entry<String, Object> entry: attributeList.entrySet()) {
+            criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+        }
+        List<T> listOfFilteredEntity = criteria.list();
+        return listOfFilteredEntity;
+    }
+
+    @Override
+    public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
+
 }
 

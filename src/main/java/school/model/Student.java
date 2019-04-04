@@ -31,7 +31,7 @@ public class Student extends Person {
     @JoinColumn(name = "school_id")
     private School school;
 
-    @Column(name = "rollNo")
+    @Column(name = "rollNo", unique = true, updatable = false)
     private int rollNo;
 
     @ManyToOne
@@ -88,10 +88,18 @@ public class Student extends Person {
     @Override
     public String toString() {
         return "Student{" +
+                "school=" + school +
+                ", rollNo=" + rollNo +
+                ", grade=" + grade +
+                '}';
+    }
+/*@Override
+    public String toString() {
+        return "Student{" +
                 "school=" + school.getName() +
                 ", rollNo=" + rollNo +
                 ", grade=" + grade +
                 ", FirstName=" + getFirstName() +
                 '}';
-    }
+    }*/
 }
